@@ -14,23 +14,29 @@ public class TestApi {
 	}
 
 	@GetMapping("/user")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public String userAccess() {
 		return "user Content.";
 	}
+	
+/*	
 	@GetMapping("/supervisor")
 	@PreAuthorize("hasRole('DISTR_SUPERVISOR')")
 	public String moderatorAccess() {
 		return "Moderator Board";
 	}
+*/
+	
 	@GetMapping("/admin")
 	@PreAuthorize("hasRole('ADMIN')")
 	public String adminAccess() {
 		return "Admin Board";
 	}
+/*	
 	@GetMapping("/manager")
 	@PreAuthorize("hasRole('ADMIN')")
 	public String managerAccess() {
 		return "Admin Board";
 	}
+*/
 }

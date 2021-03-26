@@ -8,16 +8,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.beans.Address;
+import com.project.beans.Docter;
+import com.project.beans.FosterHome;
 import com.project.beans.Role;
 import com.project.beans.RoleName;
+import com.project.beans.SecurityQuestion;
 import com.project.beans.User;
 import com.project.dto.SignUpRequest;
+import com.project.dto.SignUpRequestForFoster;
+import com.project.dto.SignUpResquestForDoc;
+import com.project.repository.DocterRepository;
+import com.project.repository.FosterRepository;
 import com.project.repository.RoleRepository;
 import com.project.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Autowired
+	FosterRepository fosterRepository;
+	
+	@Autowired
+	DocterRepository docterRepository;
+	
 	@Autowired
 	UserRepository userRepository;
 
@@ -30,50 +43,43 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void addUser(SignUpRequest signUpRequest) {
 		// create new User's account
-		User user = new User();/*
-								 * new User(signUpRequest.getFirstName(),signUpRequest.getLastName(),
-								 * signUpRequest.getEmailId(),signUpRequest.getMobileNo(),
-								 * signUpRequest.getGender(),signUpRequest.getAddress(),
-								 * signUpRequest.getCity(),signUpRequest.getState(),
-								 * signUpRequest.getZip(),passwordEncoder.encode(signUpRequest.getPassword()));
-								 */
-		user.setFirstName(signUpRequest.getFirstName());
-		user.setLastName(signUpRequest.getLastName());
-		user.setEmail(signUpRequest.getEmailId());
+		User user = new User();
+		user.setName(signUpRequest.getName());
+		user.setEmail(signUpRequest.getEmail());
 		user.setMobileNo(signUpRequest.getMobileNo());
 		user.setGender(signUpRequest.getGender());
+		user.setAlternativeMobileNo(signUpRequest.getAlernativeMobileNo());
+		user.setAnswer(signUpRequest.getAnswer());
 		Address address = new Address();
-		address.setArea(signUpRequest.getArea());
 		address.setCity(signUpRequest.getCity());
 		address.setState(signUpRequest.getState());
-		address.setZip(signUpRequest.getZip());
+		address.setPincode(signUpRequest.getPincode());
+//		address.setAddress(signUpRequest.getAddress());
+		
 		user.setAddress(address);
 		user.setPassword(passwordEncoder
-				.encode(signUpRequest.getPassword()));/*
-														 * 
-														 * Set<String> strRoles = signUpRequest.getRole();
-														 */
+				.encode(signUpRequest.getPassword()));
 		List<Role> roles = new ArrayList<>();
 		Role userRole = roleRepository.findByRoleName(RoleName.USER)
 				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 		roles.add(userRole);
 		user.setRoles(roles);
+		user.setProfession(signUpRequest.getProfession());
 		userRepository.save(user);
 	}
 
 	@Override
 	public void addAdmin(SignUpRequest signUpRequest) {
 		User user = new User();
-		user.setFirstName(signUpRequest.getFirstName());
-		user.setLastName(signUpRequest.getLastName());
-		user.setEmail(signUpRequest.getEmailId());
+		user.setName(signUpRequest.getName());
+		user.setEmail(signUpRequest.getEmail());
 		user.setMobileNo(signUpRequest.getMobileNo());
 		user.setGender(signUpRequest.getGender());
 		Address address = new Address();
-		address.setArea(signUpRequest.getArea());
 		address.setCity(signUpRequest.getCity());
 		address.setState(signUpRequest.getState());
-		address.setZip(signUpRequest.getZip());
+		address.setPincode(signUpRequest.getPincode());
+//		address.setAddress(signUpRequest.getAddress());
 		user.setAddress(address);
 		user.setPassword(passwordEncoder
 				.encode(signUpRequest.getPassword()));
@@ -86,23 +92,81 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-}
+	@Override
+	public void addDoc(SignUpResquestForDoc signUpRequestForDoc) {
+
+		Docter doc = new Docter();
+		doc.setName(signUpRequestForDoc.getName());
+		doc.setEmail(signUpRequestForDoc.getEmail());
+		doc.setMobileNo(signUpRequestForDoc.getMobileNo());
+		doc.setGender(signUpRequestForDoc.getGender());
+		doc.setProfession(signUpRequestForDoc.getProfession());
+		doc.setAnswer(signUpRequestForDoc.getAnswer());
+		Address address = new Address();
+		address.setCity(signUpRequestForDoc.getCity());
+		address.setState(signUpRequestForDoc.getState());
+		address.setPincode(signUpRequestForDoc.getPincode());
+		doc.setAddress(address);
+		doc.setExperience(signUpRequestForDoc.getExperience());
+		doc.setOfficeAddress(signUpRequestForDoc.getOfficeAddress());
+		doc.setQualification(signUpRequestForDoc.getQualification());
+		
+		doc.setPassword(passwordEncoder.encode(signUpRequestForDoc.getPassword()));
+		List<Role> roles = new ArrayList<>();
+		Role userRole = roleRepository.findByRoleName(RoleName.USER)
+				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		roles.add(userRole);
+		doc.setRoles(roles);
+		
 /*
- * if (strRoles == null) { Role userRole =
- * roleRepository.findByRoleName(RoleName.USER) .orElseThrow(() -> new
- * RuntimeException("Error: Role is not found.")); roles.add(userRole); } else {
- * strRoles.forEach(role -> { switch (role) { case "admin": Role adminRole =
- * roleRepository.findByRoleName(RoleName.ADMIN) .orElseThrow(() -> new
- * RuntimeException("Error : Role is not found.")); roles.add(adminRole); break;
- * case "manager": Role managerRole =
- * roleRepository.findByRoleName(RoleName.MANAGER) .orElseThrow(() -> new
- * RuntimeException("Error : Role is not found.")); roles.add(managerRole);
- * break; case "distr_supervisor": Role superVisorRole =
- * roleRepository.findByRoleName(RoleName.DISTR_SUPERVISOR) .orElseThrow(() ->
- * new RuntimeException("Error : Role is not found."));
- * roles.add(superVisorRole); break;
- * 
- * default: Role userRole = roleRepository.findByRoleName(RoleName.USER)
- * .orElseThrow(() -> new RuntimeException("Error : Role is not found."));
- * roles.add(userRole); } }); }
- */
+		doc.setExperience(signUpRequestForDoc.getExperience());
+		doc.setOfficeAddress(signUpRequestForDoc.getOfficeAddress());
+		doc.setQualification(signUpRequestForDoc.getQualification());
+		doc.setRating(signUpRequestForDoc.getRating());
+
+		//user.setDoc(doc);
+		user.setAddress(address);
+		user.setPassword(passwordEncoder.encode(signUpRequestForDoc.getPassword()));
+		List<Role> roles = new ArrayList<>();
+		Role userRole = roleRepository.findByRoleName(RoleName.USER)
+				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		roles.add(userRole);
+		user.setRoles(roles);
+		user.setProfession(signUpRequestForDoc.getProfession());
+		doc.setUser(user);
+*/
+		docterRepository.save(doc);
+	}
+
+	@Override
+	public void addFoster(SignUpRequestForFoster signUpRequestForFoster) {
+
+		FosterHome fhome=new FosterHome();
+		fhome.setName(signUpRequestForFoster.getName());
+		fhome.setEmail(signUpRequestForFoster.getEmail());
+		fhome.setMobileNo(signUpRequestForFoster.getMobileNo());
+		fhome.setGender(signUpRequestForFoster.getGender());
+		fhome.setAnswer(signUpRequestForFoster.getAnswer());
+		
+		Address address = new Address();
+		address.setCity(signUpRequestForFoster.getCity());
+		address.setState(signUpRequestForFoster.getState());
+		address.setPincode(signUpRequestForFoster.getPincode());
+		fhome.setAddress(address);
+		
+		fhome.setDescription(signUpRequestForFoster.getDescription());
+		fhome.setProfession(signUpRequestForFoster.getProfession());
+		
+		fhome.setPassword(passwordEncoder
+				.encode(signUpRequestForFoster.getPassword()));
+		List<Role> roles = new ArrayList<>();
+		Role userRole = roleRepository.findByRoleName(RoleName.USER)
+				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		roles.add(userRole);
+		fhome.setRoles(roles);
+		
+		fosterRepository.save(fhome);
+	}
+
+}
+

@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponse {
+	
 	private String token;
 	private String email;
 	private boolean admin;
 	private boolean user;
-	private boolean distr_supervisor;
-	private boolean manager;
+
 }

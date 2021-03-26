@@ -18,8 +18,8 @@ public class Role {
 	private int roleId;
 	@Enumerated(EnumType.STRING)
 	private RoleName roleName;
-	@ManyToMany(mappedBy ="roles" )
-	private List<User> users;
+//	@ManyToMany(mappedBy ="roles" )
+//	private List<User> users;
 	
 	
 	public Role(RoleName roleName) {

@@ -28,12 +28,7 @@ public class BackendSpringApplication implements CommandLineRunner{
 		if(!roleRepository.findByRoleName(RoleName.USER).isPresent()) {
 			roleRepository.save(new Role(RoleName.USER));
 		}
-		if(!roleRepository.findByRoleName(RoleName.DISTR_SUPERVISOR).isPresent()) {
-			roleRepository.save(new Role(RoleName.DISTR_SUPERVISOR));
-		}
-		if(!roleRepository.findByRoleName(RoleName.MANAGER).isPresent()) {
-			roleRepository.save(new Role(RoleName.MANAGER));
-		}
+
 	}
 
 }

@@ -3,8 +3,7 @@ package com.project.dto;
 import lombok.Data;
 
 @Data
-public class SignUpRequest
-{
+public class SignUpRequestForFoster {
 	private String name;
 	private String mobileNo;
 	private String alernativeMobileNo;
@@ -16,6 +15,6 @@ public class SignUpRequest
 //	private String address;
 	private long pincode;
 	private String profession;
-	private String question;
+	private String description;
 	private String answer;
 }
